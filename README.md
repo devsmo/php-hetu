@@ -28,18 +28,39 @@ Or you can add this to your composer.json
 
 ## Usage
 
+The hetu class creates an immutable value object.
+You can initialize the object in two ways:
+
 ```php
 <?php
 
-$hetu = new devsmo\Hetu('041281-981T');
+$hetu = devsmo\Hetu::create('041281-981T');
 
-if ( $hetu->isValid() ) {
+if ( $hetu ) {
 	echo "It's valid";
 }
 else {
 	echo "It's not valid...";
 }
+```
+Or if you want to catch possible errors:
 
+```php
+<?php
+
+try {
+	$hetu = new devsmo\Hetu('041281-981T');
+}
+catch (\InvalidArgumentException $e){
+	$msg = $e->getMessage();
+}
+
+```
+
+The class has three methods:
+
+```php
+<?php
 $age = $hetu->getAge(); // 35
 
 $date_of_birth = $hetu->getDateStr(); // 1981-12-04

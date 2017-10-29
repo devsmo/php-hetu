@@ -19,8 +19,8 @@ class HetuTest extends TestCase
 	 */
 	public function testValidity($hetu, $gender, $birthday, $age)
 	{
-		$instance = new devsmo\Hetu($hetu);
-		$this->assertTrue($instance->isValid());
+		$instance = devsmo\Hetu::create($hetu);
+		$this->assertNotNull($instance);
 	}
 
 	/**
@@ -28,16 +28,22 @@ class HetuTest extends TestCase
 	 */
 	public function testGender($hetu, $gender, $birthday, $age)
 	{
-		$instance = new devsmo\Hetu($hetu);
+		$instance = devsmo\Hetu::create($hetu);
 		$this->assertEquals($gender, $instance->getGender());
 	}
 
 	/**
 	 * @dataProvider validTestSet
+
+
+
+
+
+
 	 */
 	public function testBirthday($hetu, $gender, $birthday, $age)
 	{
-		$instance = new devsmo\Hetu($hetu);
+		$instance = devsmo\Hetu::create($hetu);
 		$this->assertEquals($birthday, $instance->getDateStr());
 	}
 
@@ -46,7 +52,7 @@ class HetuTest extends TestCase
 	 */
 	public function testAge($hetu, $gender, $birthday, $age)
 	{
-		$instance = new devsmo\Hetu($hetu);
+		$instance = devsmo\Hetu::create($hetu);
 		$this->assertEquals($age, $instance->getAge());
 	}
 
@@ -66,8 +72,8 @@ class HetuTest extends TestCase
 	 */
 	public function testInvalidHetu($hetu)
 	{
-		$instance = new devsmo\Hetu($hetu);
-		$this->assertFalse($instance->isValid());
+		$instance = devsmo\Hetu::create($hetu);
+		$this->assertNull($instance);
 	}
 
 
