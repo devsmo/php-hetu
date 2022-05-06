@@ -1,6 +1,13 @@
 <?php
 namespace devsmo;
 
+use Splcompanyoy\Exceptions\InvalidCenturyCharacterException;
+use Splcompanyoy\Exceptions\InvalidControllerCharacterException;
+use Splcompanyoy\Exceptions\InvalidDayException;
+use Splcompanyoy\Exceptions\InvalidLenghtException;
+use Splcompanyoy\Exceptions\InvalidMonthException;
+use Splcompanyoy\Exceptions\InvalidYearException;
+
 class Hetu {
 
 	public $hetu = null;
@@ -27,7 +34,7 @@ class Hetu {
 		$this->hetu = $hetu;
 
 		if ( strlen($this->hetu) != 11 ) {
-			throw new \InvalidArgumentException("A hetu is always 11 characters long");
+			throw new InvalidLenghtException();
 		}
 
 		// Split hetu into it's building blocks
@@ -40,23 +47,23 @@ class Hetu {
 		$this->parts->checksum = strtoupper(substr($hetu, 10, 1));
 
 		if ( $this->parts->dd < 1 || $this->parts->dd > 31 ) {
-			throw new \InvalidArgumentException("Invalid day of the month");
+			throw new InvalidDayException();
 		}
 		
 		if ( $this->parts->mm < 1 || $this->parts->mm > 12 ) {
-			throw new \InvalidArgumentException("Invalid month");
+			throw new InvalidMonthException();
 		}
 		
 		if ( !is_numeric($this->parts->yy) ) {
-			throw new \InvalidArgumentException("Invalid year");
+			throw new InvalidYearException();
 		}
 
 		if ( !$this->getCentury() ) {
-			throw new \InvalidArgumentException("Invalid century character");
+			throw new InvalidCenturyCharacterException();
 		}
 
 		if ( $this->getValidationKey() != $this->parts->checksum ) {
-			throw new \InvalidArgumentException("Invalid hetu, the control character is wrong");
+			throw new InvalidControllerCharacterException();
 		}
 	}
 	
