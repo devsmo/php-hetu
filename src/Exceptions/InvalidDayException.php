@@ -1,6 +1,6 @@
 <?php
 
-namespace Splcompanyoy\Exceptions;
+namespace Devsmo\Exceptions;
 
 use InvalidArgumentException;
 

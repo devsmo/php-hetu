@@ -1,14 +1,16 @@
 <?php
-namespace devsmo;
 
-use Splcompanyoy\Exceptions\InvalidCenturyCharacterException;
-use Splcompanyoy\Exceptions\InvalidControllerCharacterException;
-use Splcompanyoy\Exceptions\InvalidDayException;
-use Splcompanyoy\Exceptions\InvalidLenghtException;
-use Splcompanyoy\Exceptions\InvalidMonthException;
-use Splcompanyoy\Exceptions\InvalidYearException;
+namespace Devsmo;
+
+use Devsmo\Exceptions\InvalidCenturyCharacterException;
+use Devsmo\Exceptions\InvalidControllerCharacterException;
+use Devsmo\Exceptions\InvalidDayException;
+use Devsmo\Exceptions\InvalidLenghtException;
+use Devsmo\Exceptions\InvalidMonthException;
+use Devsmo\Exceptions\InvalidYearException;
 
 class Hetu {
+
 
 	public $hetu = null;
 	public $parts = null;

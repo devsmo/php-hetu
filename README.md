@@ -34,7 +34,7 @@ You can initialize the object in two ways:
 ```php
 <?php
 
-$hetu = devsmo\Hetu::create('041281-981T');
+$hetu = Devsmo\Hetu::create('041281-981T');
 
 if ( $hetu ) {
 	echo "It's valid";
@@ -49,7 +49,7 @@ Or if you want to catch possible errors:
 <?php
 
 try {
-	$hetu = new devsmo\Hetu('041281-981T');
+	$hetu = new Devsmo\Hetu('041281-981T');
 }
 catch (\InvalidArgumentException $e){
 	$msg = $e->getMessage();
