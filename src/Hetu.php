@@ -12,6 +12,9 @@ use Devsmo\Exceptions\InvalidYearException;
 class Hetu {
 
 
+    public const FEMALE = 'female';
+    public const MALE = 'male';
+
 	public $hetu = null;
 	public $parts = null;
 
@@ -129,8 +132,8 @@ class Hetu {
 	 */
 	public function getGender() {
 		switch ( $this->parts->id & 1 ) {
-			case 0: return "female";
-			case 1: return "male";
+			case 0: return self::FEMALE;
+			case 1: return self::MALE;
 		}
 	}
 }

@@ -10,8 +10,8 @@ class HetuTest extends TestCase
 	{
 		return array(
 			// Valid sets (all values are valid)
-			array('211097-9476', 'male', '1997-10-21', 20),
-			array('210202A992N', 'female', '2002-02-21', 15),
+			array('211097-9476', Hetu::MALE, '1997-10-21', 20),
+			array('210202A992N', Hetu::FEMALE, '2002-02-21', 15),
 		);
 	}
 	
