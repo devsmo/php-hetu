@@ -6,7 +6,7 @@ This simple class validates social security numbers and provides methods for che
 
 ## Requirements
 
-- PHP >= 5.4
+- PHP >= 8.0
 
 ## Installation
 
