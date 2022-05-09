@@ -2,6 +2,8 @@
 
 namespace Devsmo;
 
+use Carbon\Carbon;
+use Carbon\CarbonInterface;
 use Devsmo\Exceptions\InvalidCenturyCharacterException;
 use Devsmo\Exceptions\InvalidControllerCharacterException;
 use Devsmo\Exceptions\InvalidDayException;
@@ -18,6 +20,7 @@ class Hetu {
 	public $hetu = null;
 	public $parts = null;
 
+    public Carbon $dateOfBirth;
 
 	/**
 	 * create()
@@ -70,6 +73,9 @@ class Hetu {
 		if ( $this->getValidationKey() != $this->parts->checksum ) {
 			throw new InvalidControllerCharacterException();
 		}
+
+
+        $this->dateOfBirth = Carbon::create(($this->getCentury()+(int)$this->parts->yy), $this->parts->mm, $this->parts->dd);
 	}
 	
 
@@ -91,24 +97,21 @@ class Hetu {
 	/** 
 	 * getDateStr
 	 * Get date string. 
-	 * @todo Should this be a date object instead?
 	 * @return String yyyy-mm-dd
 	 */
-	public function getDateStr() {
-		return ($this->getCentury()+$this->parts->yy) ."-". str_pad($this->parts->mm, 2, "0", STR_PAD_LEFT) ."-". str_pad($this->parts->dd, 2, "0", STR_PAD_LEFT) ;
+	public function getDateStr(): string {
+		return $this->dateOfBirth->format('Y-m-d');
 	}
 
-	/** 
-	 * getAge
-	 * Get the age of the person based on the hetu. 
-	 * @param String, A date formated YYYY-MM-DD
-	 * @return Int, age
-	 */
-	public function getAge($date='today') {
-		$birthday =new \DateTime($this->getDateStr());
-		$today = new \DateTime($date);
-
-		return $birthday->diff($today)->y;
+    /**
+     * @param CarbonInterface|null $date Optional date for comparison.
+     * @return int The person's age in years
+     */
+	public function getAge(?CarbonInterface $date): int {
+        if (is_null($date)) {
+            $date = Carbon::today()->toImmutable();
+        }
+		return $this->dateOfBirth->diff($date)->y;
 	}
 
 	/**
