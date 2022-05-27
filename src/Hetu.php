@@ -17,7 +17,7 @@ class Hetu {
     public const FEMALE = 'female';
     public const MALE = 'male';
 
-	public $hetu = null;
+	public string $hetu;
 	public $parts = null;
 
     public Carbon $dateOfBirth;
