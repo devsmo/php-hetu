@@ -107,7 +107,7 @@ class Hetu {
      * @param CarbonInterface|null $date Optional date for comparison.
      * @return int The person's age in years
      */
-	public function getAge(?CarbonInterface $date): int {
+	public function getAge(?CarbonInterface $date = null): int {
         if (is_null($date)) {
             $date = Carbon::today()->toImmutable();
         }

@@ -1,5 +1,6 @@
 <?php
 
+use Carbon\Carbon;
 use PHPUnit\Framework\TestCase;
 use Devsmo\Hetu;
 
@@ -54,7 +55,7 @@ class HetuTest extends TestCase
 	public function testAge($hetu, $gender, $birthday, $age)
 	{
 		$instance = Hetu::create($hetu);
-		$this->assertEquals($age, $instance->getAge());
+		$this->assertEquals($age, $instance->getAge(Carbon::parse('2018-02-02')));
 	}
 
 
