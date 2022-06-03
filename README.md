@@ -1,5 +1,7 @@
 # php-hetu
 
+[![codecov](https://codecov.io/gh/SPLCompanyOy/php-hetu/branch/master/graph/badge.svg?token=5TWOBQSRJD)](https://codecov.io/gh/SPLCompanyOy/php-hetu)
+
 Finnish Social Security number validator.
 
 This simple class validates social security numbers and provides methods for checking birthdate, age and gender based on the 'hetu'.
