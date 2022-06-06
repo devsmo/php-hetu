@@ -1,0 +1,24 @@
+on: ["push", "pull_request"]
+name: Example workflow for Codecov
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: php-actions/composer@v5
+      - uses: php-actions/phpunit@v3
+        with:
+          configuration: phpunit.xml.dist
+          php_extensions: xdebug
+          bootstrap: vendor/autoload.php
+          args: --coverage-clover=clover.xml -vvv
+        env:
+          XDEBUG_MODE: coverage
+
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v3
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          files: ./clover.xml
+          verbose: true

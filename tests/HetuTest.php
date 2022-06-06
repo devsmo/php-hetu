@@ -1,6 +1,8 @@
 <?php
 
+use Carbon\Carbon;
 use PHPUnit\Framework\TestCase;
+use Devsmo\Hetu;
 
 class HetuTest extends TestCase
 {
@@ -9,8 +11,8 @@ class HetuTest extends TestCase
 	{
 		return array(
 			// Valid sets (all values are valid)
-			array('211097-9476', 'male', '1997-10-21', 20),
-			array('210202A992N', 'female', '2002-02-21', 15),
+			array('211097-9476', Hetu::MALE, '1997-10-21', 20),
+			array('210202A992N', Hetu::FEMALE, '2002-02-21', 15),
 		);
 	}
 	
@@ -19,7 +21,7 @@ class HetuTest extends TestCase
 	 */
 	public function testValidity($hetu, $gender, $birthday, $age)
 	{
-		$instance = devsmo\Hetu::create($hetu);
+		$instance = Hetu::create($hetu);
 		$this->assertNotNull($instance);
 	}
 
@@ -28,7 +30,7 @@ class HetuTest extends TestCase
 	 */
 	public function testGender($hetu, $gender, $birthday, $age)
 	{
-		$instance = devsmo\Hetu::create($hetu);
+		$instance = Hetu::create($hetu);
 		$this->assertEquals($gender, $instance->getGender());
 	}
 
@@ -43,7 +45,7 @@ class HetuTest extends TestCase
 	 */
 	public function testBirthday($hetu, $gender, $birthday, $age)
 	{
-		$instance = devsmo\Hetu::create($hetu);
+		$instance = Hetu::create($hetu);
 		$this->assertEquals($birthday, $instance->getDateStr());
 	}
 
@@ -52,8 +54,8 @@ class HetuTest extends TestCase
 	 */
 	public function testAge($hetu, $gender, $birthday, $age)
 	{
-		$instance = devsmo\Hetu::create($hetu);
-		$this->assertEquals($age, $instance->getAge());
+		$instance = Hetu::create($hetu);
+		$this->assertEquals($age, $instance->getAge(Carbon::parse('2018-02-02')));
 	}
 
 
@@ -72,7 +74,7 @@ class HetuTest extends TestCase
 	 */
 	public function testInvalidHetu($hetu)
 	{
-		$instance = devsmo\Hetu::create($hetu);
+		$instance = Hetu::create($hetu);
 		$this->assertNull($instance);
 	}
 

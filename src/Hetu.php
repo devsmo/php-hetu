@@ -1,11 +1,26 @@
 <?php
-namespace devsmo;
+
+namespace Devsmo;
+
+use Carbon\Carbon;
+use Carbon\CarbonInterface;
+use Devsmo\Exceptions\InvalidCenturyCharacterException;
+use Devsmo\Exceptions\InvalidControllerCharacterException;
+use Devsmo\Exceptions\InvalidDayException;
+use Devsmo\Exceptions\InvalidLenghtException;
+use Devsmo\Exceptions\InvalidMonthException;
+use Devsmo\Exceptions\InvalidYearException;
 
 class Hetu {
 
-	public $hetu = null;
+
+    public const FEMALE = 'female';
+    public const MALE = 'male';
+
+	public string $hetu;
 	public $parts = null;
 
+    public Carbon $dateOfBirth;
 
 	/**
 	 * create()
@@ -27,7 +42,7 @@ class Hetu {
 		$this->hetu = $hetu;
 
 		if ( strlen($this->hetu) != 11 ) {
-			throw new \InvalidArgumentException("A hetu is always 11 characters long");
+			throw new InvalidLenghtException();
 		}
 
 		// Split hetu into it's building blocks
@@ -40,24 +55,27 @@ class Hetu {
 		$this->parts->checksum = strtoupper(substr($hetu, 10, 1));
 
 		if ( $this->parts->dd < 1 || $this->parts->dd > 31 ) {
-			throw new \InvalidArgumentException("Invalid day of the month");
+			throw new InvalidDayException();
 		}
 		
 		if ( $this->parts->mm < 1 || $this->parts->mm > 12 ) {
-			throw new \InvalidArgumentException("Invalid month");
+			throw new InvalidMonthException();
 		}
 		
 		if ( !is_numeric($this->parts->yy) ) {
-			throw new \InvalidArgumentException("Invalid year");
+			throw new InvalidYearException();
 		}
 
 		if ( !$this->getCentury() ) {
-			throw new \InvalidArgumentException("Invalid century character");
+			throw new InvalidCenturyCharacterException();
 		}
 
 		if ( $this->getValidationKey() != $this->parts->checksum ) {
-			throw new \InvalidArgumentException("Invalid hetu, the control character is wrong");
+			throw new InvalidControllerCharacterException();
 		}
+
+
+        $this->dateOfBirth = Carbon::create(($this->getCentury()+(int)$this->parts->yy), $this->parts->mm, $this->parts->dd);
 	}
 	
 
@@ -79,24 +97,21 @@ class Hetu {
 	/** 
 	 * getDateStr
 	 * Get date string. 
-	 * @todo Should this be a date object instead?
 	 * @return String yyyy-mm-dd
 	 */
-	public function getDateStr() {
-		return ($this->getCentury()+$this->parts->yy) ."-". str_pad($this->parts->mm, 2, "0", STR_PAD_LEFT) ."-". str_pad($this->parts->dd, 2, "0", STR_PAD_LEFT) ;
+	public function getDateStr(): string {
+		return $this->dateOfBirth->format('Y-m-d');
 	}
 
-	/** 
-	 * getAge
-	 * Get the age of the person based on the hetu. 
-	 * @param String, A date formated YYYY-MM-DD
-	 * @return Int, age
-	 */
-	public function getAge($date='today') {
-		$birthday =new \DateTime($this->getDateStr());
-		$today = new \DateTime($date);
-
-		return $birthday->diff($today)->y;
+    /**
+     * @param CarbonInterface|null $date Optional date for comparison.
+     * @return int The person's age in years
+     */
+	public function getAge(?CarbonInterface $date = null): int {
+        if (is_null($date)) {
+            $date = Carbon::today()->toImmutable();
+        }
+		return $this->dateOfBirth->diff($date)->y;
 	}
 
 	/**
@@ -120,8 +135,8 @@ class Hetu {
 	 */
 	public function getGender() {
 		switch ( $this->parts->id & 1 ) {
-			case 0: return "female";
-			case 1: return "male";
+			case 0: return self::FEMALE;
+			case 1: return self::MALE;
 		}
 	}
 }
