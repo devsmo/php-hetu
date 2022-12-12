@@ -22,6 +22,18 @@ class Hetu {
 
     public Carbon $dateOfBirth;
 
+    public const CENTURY_CODES_1800 = [
+        '+'
+    ];
+
+    public const CENTURY_CODES_1900 = [
+        '-', 'Y', 'X', 'W', 'V', 'U'
+    ];
+
+    public const CENTURY_CODES_2000 = [
+        'A', 'B', 'C', 'D', 'E', 'F'
+    ];
+
 	/**
 	 * create()
 	 * Shortcut for initializing the Hetu class
@@ -120,12 +132,16 @@ class Hetu {
 	 * @return Int, Century in four digit format
 	 */
 	public function getCentury() {
-		switch( $this->parts->century_code ) {
-			case '+': return 1800;
-			case '-': return 1900;
-			case 'A': return 2000;
-			default: return null;
-		}
+        if (in_array($this->parts->century_code, self::CENTURY_CODES_1800)){
+            return 1800;
+        }
+        if (in_array($this->parts->century_code, self::CENTURY_CODES_1900)){
+            return 1900;
+        }
+        if (in_array($this->parts->century_code, self::CENTURY_CODES_2000)){
+            return 2000;
+        }
+        return null;
 	}
 
 	/**
