@@ -1,12 +1,14 @@
 # php-hetu
 
+[![codecov](https://codecov.io/gh/SPLCompanyOy/php-hetu/branch/master/graph/badge.svg?token=5TWOBQSRJD)](https://codecov.io/gh/SPLCompanyOy/php-hetu)
+
 Finnish Social Security number validator.
 
 This simple class validates social security numbers and provides methods for checking birthdate, age and gender based on the 'hetu'.
 
 ## Requirements
 
-- PHP >= 5.4
+- PHP >= 8.0
 
 ## Installation
 
@@ -34,7 +36,7 @@ You can initialize the object in two ways:
 ```php
 <?php
 
-$hetu = devsmo\Hetu::create('041281-981T');
+$hetu = Devsmo\Hetu::create('041281-981T');
 
 if ( $hetu ) {
 	echo "It's valid";
@@ -49,7 +51,7 @@ Or if you want to catch possible errors:
 <?php
 
 try {
-	$hetu = new devsmo\Hetu('041281-981T');
+	$hetu = new Devsmo\Hetu('041281-981T');
 }
 catch (\InvalidArgumentException $e){
 	$msg = $e->getMessage();
