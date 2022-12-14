@@ -2,8 +2,8 @@
 
 namespace Devsmo;
 
-use Carbon\Carbon;
-use Carbon\CarbonInterface;
+use DateTimeImmutable;
+use DateTimeInterface;
 use Devsmo\Exceptions\InvalidCenturyCharacterException;
 use Devsmo\Exceptions\InvalidControllerCharacterException;
 use Devsmo\Exceptions\InvalidDayException;
@@ -20,7 +20,7 @@ class Hetu {
 	public string $hetu;
 	public $parts = null;
 
-    public Carbon $dateOfBirth;
+    public DateTimeImmutable $dateOfBirth;
 
     public const CENTURY_CODES_1800 = [
         '+'
@@ -34,26 +34,26 @@ class Hetu {
         'A', 'B', 'C', 'D', 'E', 'F'
     ];
 
-	/**
-	 * create()
-	 * Shortcut for initializing the Hetu class
-	 * @param String a hetu string
-	 * @return Hetu object or null if invalid
-	 */
-	static public function create($hetu) {
+    /**
+     * create()
+     * Shortcut for initializing the Hetu class
+     * @param String $hetu a hetu string
+     * @return Hetu|null object or null if invalid
+     */
+	public static function create(string $hetu): ?self {
 		try {
-			$hetu = new self($hetu);
+			$hetuObject = new self($hetu);
 		} catch (\InvalidArgumentException $e) {
 			return null;
 		}
-		return $hetu;
+		return $hetuObject;
 	}
 
 
-	public function __construct($hetu) {
+	public function __construct(string $hetu) {
 		$this->hetu = $hetu;
 
-		if ( strlen($this->hetu) != 11 ) {
+		if ( strlen($this->hetu) !== 11 ) {
 			throw new InvalidLenghtException();
 		}
 
@@ -62,9 +62,9 @@ class Hetu {
 		$this->parts->dd = substr($hetu, 0, 2); // we dont type-cast to int,
 		$this->parts->mm = substr($hetu, 2, 2); // we need the leading zero
 		$this->parts->yy = substr($hetu, 4, 2); // php deals with numeric strings fine
-		$this->parts->century_code = strtoupper(substr($hetu, 6, 1));
+		$this->parts->century_code = strtoupper($hetu[6]);
 		$this->parts->id = (int) ($this->parts->dd . $this->parts->mm . $this->parts->yy . substr($hetu, 7, 3));
-		$this->parts->checksum = strtoupper(substr($hetu, 10, 1));
+		$this->parts->checksum = strtoupper($hetu[10]);
 
 		if ( $this->parts->dd < 1 || $this->parts->dd > 31 ) {
 			throw new InvalidDayException();
@@ -82,21 +82,21 @@ class Hetu {
 			throw new InvalidCenturyCharacterException();
 		}
 
-		if ( $this->getValidationKey() != $this->parts->checksum ) {
+		if ( $this->getValidationKey() !== $this->parts->checksum ) {
 			throw new InvalidControllerCharacterException();
 		}
 
 
-        $this->dateOfBirth = Carbon::create(($this->getCentury()+(int)$this->parts->yy), $this->parts->mm, $this->parts->dd);
+        $this->dateOfBirth = DateTimeImmutable::createFromFormat('Y-m-d',($this->getCentury()+(int)$this->parts->yy).'-'. $this->parts->mm.'-'.$this->parts->dd);
 	}
-	
 
-	/** 
-	 * getValidationKey
-	 * Calculate the validation key for this hetu
-	 * @return Char, 0-9A-Y or null on failure
-	 */
-	public function getValidationKey() {
+
+    /**
+     * getValidationKey
+     * Calculate the validation key for this hetu
+     * @return string|null , 0-9A-Y or null on failure
+     */
+	public function getValidationKey(): ?string {
 		$validation_keys = str_split('0123456789ABCDEFHJKLMNPRSTUVWXY');
 		$hetu_key = $this->parts->id % 31;
 
@@ -116,29 +116,29 @@ class Hetu {
 	}
 
     /**
-     * @param CarbonInterface|null $date Optional date for comparison.
+     * @param DateTimeInterface|bool|null $date Optional date for comparison.
      * @return int The person's age in years
      */
-	public function getAge(?CarbonInterface $date = null): int {
+	public function getAge(DateTimeInterface|bool|null $date = null): int {
         if (is_null($date)) {
-            $date = Carbon::today()->toImmutable();
+            $date = DateTimeImmutable::createFromFormat('Y-m-d', date('Y-m-d'));
         }
 		return $this->dateOfBirth->diff($date)->y;
 	}
 
-	/**
-	 * getCentury
-	 * Get century based on the century char in the hetu
-	 * @return Int, Century in four digit format
-	 */
-	public function getCentury() {
-        if (in_array($this->parts->century_code, self::CENTURY_CODES_1800)){
+    /**
+     * getCentury
+     * Get century based on the century char in the hetu
+     * @return int|null Century in four digit format
+     */
+	public function getCentury(): ?int {
+        if (in_array($this->parts->century_code, self::CENTURY_CODES_1800, true)){
             return 1800;
         }
-        if (in_array($this->parts->century_code, self::CENTURY_CODES_1900)){
+        if (in_array($this->parts->century_code, self::CENTURY_CODES_1900, true)){
             return 1900;
         }
-        if (in_array($this->parts->century_code, self::CENTURY_CODES_2000)){
+        if (in_array($this->parts->century_code, self::CENTURY_CODES_2000, true)){
             return 2000;
         }
         return null;
@@ -147,9 +147,10 @@ class Hetu {
 	/**
 	 * getGender
 	 * Get the sex based on the hetu
-	 * @return String, 'male' or 'female'
+	 * @return String 'male' or 'female'
 	 */
-	public function getGender() {
+	public function getGender(): string
+    {
 		switch ( $this->parts->id & 1 ) {
 			case 0: return self::FEMALE;
 			case 1: return self::MALE;

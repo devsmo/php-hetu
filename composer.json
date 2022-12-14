@@ -6,8 +6,7 @@
     "homepage": "https://github.com/Devsmo/php-hetu",
     "license": "MIT",
     "require": {
-        "php": ">=8.0",
-        "nesbot/carbon": "^2.58"
+        "php": ">=8.0"
     },
     "autoload": {
         "classmap": ["src/"]

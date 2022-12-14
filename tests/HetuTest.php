@@ -1,14 +1,13 @@
 <?php
 
-use Carbon\Carbon;
 use PHPUnit\Framework\TestCase;
 use Devsmo\Hetu;
 
 class HetuTest extends TestCase
 {
 
-	public function validTestSet()
-	{
+	public function validTestSet(): ?\Generator
+    {
 		// Valid sets (all values are valid)
 		yield '211097-9476' => ['211097-9476', Hetu::MALE, '1997-10-21', 20];
 		yield '210202A992N' => ['210202A992N', Hetu::FEMALE, '2002-02-21', 15];
@@ -40,8 +39,8 @@ class HetuTest extends TestCase
 	/**
 	 * @dataProvider validTestSet
 	 */
-	public function testValidity($hetu, $gender, $birthday, $age)
-	{
+	public function testValidity($hetu, $gender, $birthday, $age): void
+    {
 		$instance = Hetu::create($hetu);
 		$this->assertNotNull($instance);
 	}
@@ -49,8 +48,8 @@ class HetuTest extends TestCase
 	/**
 	 * @dataProvider validTestSet
 	 */
-	public function testGender($hetu, $gender, $birthday, $age)
-	{
+	public function testGender($hetu, $gender, $birthday, $age): void
+    {
 		$instance = Hetu::create($hetu);
 		$this->assertEquals($gender, $instance->getGender());
 	}
@@ -58,8 +57,8 @@ class HetuTest extends TestCase
 	/**
 	 * @dataProvider validTestSet
 	 */
-	public function testBirthday($hetu, $gender, $birthday, $age)
-	{
+	public function testBirthday($hetu, $gender, $birthday, $age): void
+    {
 		$instance = Hetu::create($hetu);
 		$this->assertEquals($birthday, $instance->getDateStr());
 	}
@@ -67,15 +66,15 @@ class HetuTest extends TestCase
 	/**
 	 * @dataProvider validTestSet
 	 */
-	public function testAge($hetu, $gender, $birthday, $age)
-	{
+	public function testAge($hetu, $gender, $birthday, $age): void
+    {
 		$instance = Hetu::create($hetu);
-		$this->assertEquals($age, $instance->getAge(Carbon::parse('2018-02-02')));
+		$this->assertEquals($age, $instance->getAge(DateTimeImmutable::createFromFormat('Y-m-d','2018-02-02')));
 	}
 
 
-	public function invalidTestSet()
-	{
+	public function invalidTestSet(): array
+    {
 		return array(
 			// Valid sets (none of the values are valid)
 			array('211096-9476'),
@@ -87,8 +86,8 @@ class HetuTest extends TestCase
 	/**
 	 * @dataProvider invalidTestSet
 	 */
-	public function testInvalidHetu($hetu)
-	{
+	public function testInvalidHetu($hetu): void
+    {
 		$instance = Hetu::create($hetu);
 		$this->assertNull($instance);
 	}
